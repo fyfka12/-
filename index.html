@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сердце в браузере</title>
+    <style>
+        body {
+            background-color: black;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        canvas {
+            display: block;
+            margin: auto;
+            background-color: black;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="heartCanvas" width="500" height="500"></canvas>
+
+<script>
+    function hearta(k) {
+        return 15 * Math.sin(k) ** 3;
+    }
+
+    function heartb(k) {
+        return 12 * Math.cos(k) - 5 * Math.cos(2 * k) - 2 * Math.cos(3 * k) - Math.cos(4 * k);
+    }
+
+    const canvas = document.getElementById("heartCanvas");
+    const ctx = canvas.getContext("2d");
+
+    ctx.fillStyle = "#FF0000"; // Цвет заливки
+    ctx.lineWidth = 2; // Толщина линии
+    ctx.strokeStyle = "#FF0000"; // Цвет обводки
+
+    function drawHeart() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // Очистка канваса перед рисованием
+        ctx.beginPath(); // Начинаем рисовать
+
+        // Рисуем сердце
+        for (let i = 0; i <= 2 * Math.PI; i += 0.01) {  // 2*Math.PI — полный круг
+            let x = hearta(i) * 20 + 250; // Центрировать сердце по X
+            let y = -heartb(i) * 20 + 250; // Центрировать сердце по Y, и инвертируем по Y
+            if (i === 0) {
+                ctx.moveTo(x, y); // Начальная точка
+            } else {
+                ctx.lineTo(x, y); // Рисуем линии
+            }
+        }
+
+        ctx.closePath(); // Закрываем путь
+        ctx.fill(); // Заполняем цветом
+        ctx.stroke(); // Обводим контур
+    }
+
+    drawHeart(); // Рисуем сердце один раз
+
+    // Если хочешь анимацию
+    let angle = 0;
+    function animateHeart() {
+        drawHeart();
+        angle += 0.01;
+        requestAnimationFrame(animateHeart); // Анимация
+    }
+
+    // Для анимации
+    // animateHeart();
+</script>
+
+</body>
+</html>
